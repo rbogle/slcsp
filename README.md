@@ -60,11 +60,6 @@ pytest .
 Both `black` and `flake8` are installed to enable style and formmating checks:
 
 ```bash
-./Taskfile format
-```
-or they can be run independently:
-
-```bash
 black .
 ```
 

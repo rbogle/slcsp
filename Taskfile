@@ -8,17 +8,8 @@ function install-dev {
     pre-commit install
 }
 
-function test {
-    pytest
-}
-
-function format {
-    black .
-    flake8 .
-}
-
 function freeze {
-    pip freeze > requirements.txt
+    pip freeze > requirements-dev.txt
 }
 
 function clean-env {
