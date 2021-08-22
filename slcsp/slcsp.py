@@ -1,5 +1,6 @@
 import csv
 
+
 def load_datafile(filename: str) -> list:
     """Takes a filename for a csv file and converts the file to a list
 
@@ -16,8 +17,9 @@ def load_datafile(filename: str) -> list:
             data.append(row)
         return data
 
-def filter_plans( plans: list, plan: str='Silver') -> dict:
-    """Filters the raw list from plans file for the 'plan' needed 
+
+def filter_plans(plans: list, plan: str = "Silver") -> dict:
+    """Filters the raw list from plans file for the 'plan' needed
        and builds a dictonary of state, area, and rates list.
 
     Args:
@@ -36,7 +38,7 @@ def filter_plans( plans: list, plan: str='Silver') -> dict:
     filtered_data = dict()
     for row in plans:
         # only process the plan we want default: 'Silver'
-        if row[2]==plan:
+        if row[2] == plan:
             state = row[1]
             area = row[4]
             rate = row[3]
@@ -49,6 +51,7 @@ def filter_plans( plans: list, plan: str='Silver') -> dict:
             # now append the rate to the list for the area
             filtered_data[state][area].append(float(rate))
     return filtered_data
+
 
 def filter_zip_map(zip_map: list) -> dict:
     """Takes a raw list of zipcode,state,county_code,name,rate_area
@@ -75,17 +78,18 @@ def filter_zip_map(zip_map: list) -> dict:
         area = row[4]
         # seed a dict for the zipcode if dne
         if zipcode not in filtered_map:
-            filtered_map[zipcode]=dict()
+            filtered_map[zipcode] = dict()
         # seed a list for the state if dne
         if state not in filtered_map[zipcode]:
-            filtered_map[zipcode][state]=list()
+            filtered_map[zipcode][state] = list()
         # put the area in to the list if dne
         if area not in filtered_map[zipcode][state]:
-             filtered_map[zipcode][state].append(area)
+            filtered_map[zipcode][state].append(area)
     return filtered_map
 
+
 def lookup_state_area(zip_code: str, zip_map: dict) -> tuple:
-    """Takes a zipcode and filtered zip_map and returns a tuple 
+    """Takes a zipcode and filtered zip_map and returns a tuple
         of the state and area for that zip
 
     Args:
@@ -97,11 +101,11 @@ def lookup_state_area(zip_code: str, zip_map: dict) -> tuple:
     """
     states = zip_map.get(zip_code, None)
     # unknown zip code
-    if states is None: 
+    if states is None:
         return None
- 
+
     # more than one state in zip_code = ambiguous answer
-    if len(states.keys())>1:
+    if len(states.keys()) > 1:
         return None
 
     # gets the first key, should be only one
@@ -113,7 +117,7 @@ def lookup_state_area(zip_code: str, zip_map: dict) -> tuple:
         return None
     else:
         return (state, areas[0])
-    
+
 
 def lookup_plan_rates(state: str, area: str, plan_rates: dict) -> list:
     """Returns a sorted list of rates for the state and area
@@ -135,7 +139,7 @@ def lookup_plan_rates(state: str, area: str, plan_rates: dict) -> list:
     return None
 
 
-def find_slcsp(zip_map:dict, plans: dict, zip_list: list) -> list:
+def find_slcsp(zip_map: dict, plans: dict, zip_list: list) -> list:
     """Dives into the the plan rates to find the slcsp for each zip
        and adds the slcsp to the row in ziplist
 
@@ -148,20 +152,21 @@ def find_slcsp(zip_map:dict, plans: dict, zip_list: list) -> list:
         list: original list of zips augmented with the slcsp data
     """
     for row in zip_list:
-        zip_code=row[0]
+        zip_code = row[0]
         geo = lookup_state_area(zip_code, zip_map)
         if geo is not None:
-            state,area=geo
+            state, area = geo
             rates = lookup_plan_rates(state, area, plans)
-            if rates is not None and len(rates) > 1: 
+            if rates is not None and len(rates) > 1:
                 # set empty field to second lowest rate
-                row[1]= str(rates[1])
+                row[1] = str(rates[1])
     return zip_list
 
-def process_data( plans_filename:str, zip_map_filename:str, slcsp_filename:str):
+
+def process_data(plans_filename: str, zip_map_filename: str, slcsp_filename: str):
     """Main processes the 3 required files, creates the filtered data
        and then iterates over the provided zip list to find the slcsp for each
-       then prints out the pair of zip and slcsp in order requested. 
+       then prints out the pair of zip and slcsp in order requested.
 
     Args:
         plans_filename (str): [description]
@@ -173,7 +178,7 @@ def process_data( plans_filename:str, zip_map_filename:str, slcsp_filename:str):
     all_plans = load_datafile(plans_filename)
     silverplans = filter_plans(all_plans)
 
-    # load and filter zip_map data 
+    # load and filter zip_map data
     zip_area_data = load_datafile(zip_map_filename)
     zip_mapping = filter_zip_map(zip_area_data)
 

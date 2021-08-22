@@ -1,5 +1,6 @@
 # SLCSP
 This project solves the slcsp problem for a given data set, finding the second lowest cost silver plan for each zipcode provided.
+The output of running this package is to standard out. 
 
 ## Installation
 This project is written in `python 3`, specifically `python 3.9.6`.  
@@ -36,6 +37,8 @@ optional arguments:
 
 ```
 
+
+
 ## Contributing
 This project uses a few helpers to aid in dev dependency install, testing, formatting
 
@@ -68,5 +71,3 @@ black .
 ```bash
 flake8 .
 ```
-
-The dev dependcies also install `pre-commit` hooks to run these before executing `git commit`.
