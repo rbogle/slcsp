@@ -1,0 +1,35 @@
+#!/bin/bash
+PATH=./node_modules/.bin:$PATH
+
+function install-dev {
+    python3.9 -m venv .env
+    source .env/bin/activate
+    pip install -r requirements-dev.txt
+    pre-commit install
+}
+
+function test {
+    pytest
+}
+
+function format {
+    black .
+    flake8 .
+}
+
+function freeze {
+    pip freeze > requirements.txt
+}
+
+function clean-env {
+    rm -rf .env
+}
+
+function help {
+    echo "$0 <task> <args>"
+    echo "Tasks:"
+    compgen -A function | cat -n
+}
+
+TIMEFORMAT="Task completed in %3lR"
+time ${@:-default}
