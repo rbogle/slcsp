@@ -43,12 +43,12 @@ optional arguments:
 This project uses a few helpers to aid in dev dependency install, testing, formatting
 
 ### Install dev dependencies 
-Use the [Taskfile]https://github.com/adriancooney/Taskfile) to install deps
+Use the [Taskfile](https://github.com/adriancooney/Taskfile) to install deps
 
 ```bash
 ./Taskfile install-dev
 ```
-This will setup dependencies for formatiing and testing
+This will setup dependencies for formatting and testing
 
 ## Testing
 You can run the unit tests for the package with `pytest`
